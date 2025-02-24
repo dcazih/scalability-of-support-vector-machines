@@ -1,4 +1,4 @@
-Report: Scalability of Support Vector Machines
+# Report: Scalability of Support Vector Machines
 Dmitri Azih and Dylan Rivas
 
 # Purposes
