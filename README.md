@@ -1,7 +1,7 @@
 # Report: Scalability of Support Vector Machines
 Dmitri Azih and Dylan Rivas
 
-# Purposes
+## Purposes
 
 - Understanding the most popular Support Vector Machines (SVMs).
 - Designing a basic algorithm to generate linearly separable datasets.
@@ -9,7 +9,7 @@ Dmitri Azih and Dylan Rivas
 - Understanding and using the built-in SVMs in scikit-learn.
 - Evaluating the scalability of SVMs on linearly separable datasets.
 
-# Implementation Tasks
+## Implementation Tasks
 
 1. **LinearSVC Class**: 
    - Implement a Python class `LinearSVC` to learn a linear Support Vector Classifier (SVC) from a training dataset.
