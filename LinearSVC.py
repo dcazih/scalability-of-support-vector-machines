@@ -1,6 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from sklearn.svm import LinearSVC as SklearnLinearSVC
+from sklearn.metrics import accuracy_score
+import time
 
 #####################
 # SVC Class
@@ -214,3 +217,59 @@ if scalability:
             accuracy = (((y_test.shape[0])-misclassifcations)/y_test.shape[0])*100
             print(f"    Missclassifcations (d = {di}): {misclassifcations}\n    Accuracy: {accuracy:.2f}")
             
+###############################
+#  Performance Comparison with Scikit-Learn's LinearSVC
+comparison = True
+if comparison:
+    print(f"\nComparison of LinearSVC's")
+    # Initialize parameters for testing
+    u = 1e12
+    d = [10, 50, 100, 500, 1000]
+    n = [500, 1000, 5000, 10000, 100000]
+
+    # Loop through different dataset sizes
+    for ni in n:
+        print(f"\nNumber of data points (n = {ni}):")
+        for di in d:
+            print(f"\nNumber of feature dimensions (d = {di})")
+
+            # Generate test data
+            X, y, a = make_classification(d=di, n=ni, u=u, random_seed=random_seed, graph=True)
+            # Split data
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=random_seed+1)
+
+            # Test the custom SVC from this script
+            customSVC = LinearSVC(eta=0.0005, n_iter=100, random_state=random_seed, L2_reg=-.001)
+            # Time the training
+            startTime = time.time()
+            customSVC.fit(X_train, y_train)
+            customTrainTime = time.time() - startTime
+            # Get the accuracy
+            customPredict = customSVC.predict(X_test)
+            customAccuracy = accuracy_score(y_test, customPredict)
+
+            # Test the sklearn SVC for primal problem
+            skLearnSVC_primal = SklearnLinearSVC(dual=False, max_iter=1000, random_state=random_seed)
+            # Time the training
+            startTime = time.time()
+            skLearnSVC_primal.fit(X_train, y_train)
+            skLearnSVC_primalTrainTime = time.time() - startTime
+            # Get the accuracy
+            skLearnSVC_primalPredict = skLearnSVC_primal.predict(X_test)
+            skLearnSVC_primalAccuracy = accuracy_score(y_test, skLearnSVC_primalPredict)
+
+            # Test the sklearn SVC for dual problem
+            skLearnSVC_dual = SklearnLinearSVC(dual=True, max_iter=1000, random_state=random_seed)
+            # Time the training
+            startTime = time.time()
+            skLearnSVC_dual.fit(X_train, y_train)
+            skLearnSVC_dualTrainTime = time.time() - startTime
+            # Get the accuracy
+            skLearnSVC_dualPredict = skLearnSVC_primal.predict(X_test)
+            skLearnSVC_dualAccuracy = accuracy_score(y_test, skLearnSVC_primalPredict)
+
+            # Print the results
+            print(f"Custom SVC - Train Time: {customTrainTime:.4f}s, Accuracy: {customAccuracy:.4f}")
+            print(f"Sklearn Primal SVC - Train Time: {skLearnSVC_primalTrainTime:.4f}s, Accuracy: {skLearnSVC_primalAccuracy:.4f}")
+            print(f"Sklearn Dual SVC - Train Time: {skLearnSVC_dualTrainTime:.4f}s, Accuracy: {skLearnSVC_dualAccuracy:.4f}")
+
