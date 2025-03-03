@@ -120,7 +120,7 @@ if example_results:
 
 results = []
 
-scalability = False
+scalability = True
 if scalability:
 
     u = 1e12
@@ -138,28 +138,23 @@ if scalability:
 
             # Create and fit a SVC under training data
             svc = LinearSVC(eta=0.0005, epochs=100, random_state=random_seed, L2_reg=0.001)
-            trained_svc = svc.fit(X_train, y_train)
 
             # GET the fitting time
             start_time = time.time()
             trained_svc = svc.fit(X_train, y_train)
             fit_time = time.time() - start_time
 
-            # Get prediction time
-            start_time = time.time()
-            y_pred = trained_svc.predict(X_test)
-            pred_time = time.time() - start_time
-
             # Calculate SVC's performance
+            y_pred = trained_svc.predict(X_test)
             misclassifications = np.sum(y_pred != y_test)
             accuracy = (((y_test.shape[0]) - misclassifications) / y_test.shape[0]) * 100
 
             # Store the results for each combination
-            results.append([ni, di, round(fit_time, 2), round(pred_time, 2), misclassifications, round(accuracy, 2)])
+            results.append([ni, di, round(fit_time, 2), misclassifications, round(accuracy, 2)])
 
-# Tabulate performance
-df = pd.DataFrame(results, columns=["Data Points (n)", "Dimensions (d)", "Fit Time (s)", "Prediction Time (s)", "Misclass/\nifications", "Accuracy (%)"])
-plot_df(df)
+    # Tabulate performance
+    df = pd.DataFrame(results, columns=["Data Points (n)", "Dimensions (d)", "Fit Time (s)", "Misclassifications", "Accuracy (%)"])
+    plot_df(df)
 
 
 ###############################
