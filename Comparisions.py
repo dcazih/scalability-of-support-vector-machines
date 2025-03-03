@@ -83,7 +83,7 @@ def make_classification(d=10, n=500, u=1e6, random_seed=123):
 
 
 ###############################
-#  Example Data Creation/Training/Results/Plotting
+#  Demo: Data Creation
 
 random_seed = 123
 
@@ -112,7 +112,6 @@ if example_results:
     misclassifcations = np.sum(y_pred != y_test)
     accuracy = (((y_test.shape[0])-misclassifcations)/y_test.shape[0])*100
     print(f"Test data missclassifcations: {misclassifcations}\nAccuracy: {accuracy:.2f}")
-
 
 
 ###############################
