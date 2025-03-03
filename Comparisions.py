@@ -1,5 +1,6 @@
 import time
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from LinearSVC import LinearSVC
 from sklearn.metrics import accuracy_score
@@ -48,6 +49,14 @@ def plot_3D(X, y, a, u, classtype="", title="Linearly Separable #D Data with Hyp
     ax.legend() 
     plt.show()
 
+def plot_df(df):
+    fig, ax = plt.subplots(figsize=(10, 6)) 
+    ax.axis('off')
+    ax.table(cellText=df.values, colLabels=df.columns, loc='center', cellLoc='center', colLoc='center')
+    plt.show()
+
+    df.to_excel('performance_analysis.xlsx', index=False, engine='openpyxl')
+    print(df)
 
 ###############################
 #  Data Generation Method
@@ -104,21 +113,19 @@ if example_results:
     accuracy = (((y_test.shape[0])-misclassifcations)/y_test.shape[0])*100
     print(f"Test data missclassifcations: {misclassifcations}\nAccuracy: {accuracy:.2f}")
 
-    # Plot models predictions against hyperplane
-    if d==2: plot_2D(X_test, y_pred, a, u, "(predicted)")
-    elif d==3: plot_3D(X_test, y_pred, a, u, "(predicted)")
 
 
 ###############################
 #  Testing: Exploring Scalability
 
-scalability = True
+results = []
+
+scalability = False
 if scalability:
 
     u = 1e12
     d = [10, 50, 100, 500, 1000]
     n = [500, 1000, 5000, 10000, 100000]
-
 
     for ni in n:
         print(f"\nNumber of data points (n = {ni}):")
@@ -133,13 +140,27 @@ if scalability:
             svc = LinearSVC(eta=0.0005, epochs=100, random_state=random_seed, L2_reg=0.001)
             trained_svc = svc.fit(X_train, y_train)
 
+            # GET the fitting time
+            start_time = time.time()
+            trained_svc = svc.fit(X_train, y_train)
+            fit_time = time.time() - start_time
+
+            # Get prediction time
+            start_time = time.time()
             y_pred = trained_svc.predict(X_test)
+            pred_time = time.time() - start_time
 
             # Calculate SVC's performance
-            misclassifcations = np.sum(y_pred != y_test)
-            accuracy = (((y_test.shape[0])-misclassifcations)/y_test.shape[0])*100
-            print(f"    Missclassifcations (d = {di}): {misclassifcations}\n    Accuracy: {accuracy:.2f}")
-            
+            misclassifications = np.sum(y_pred != y_test)
+            accuracy = (((y_test.shape[0]) - misclassifications) / y_test.shape[0]) * 100
+
+            # Store the results for each combination
+            results.append([ni, di, round(fit_time, 2), round(pred_time, 2), misclassifications, round(accuracy, 2)])
+
+# Tabulate performance
+df = pd.DataFrame(results, columns=["Data Points (n)", "Dimensions (d)", "Fit Time (s)", "Prediction Time (s)", "Misclass/\nifications", "Accuracy (%)"])
+plot_df(df)
+
 
 ###############################
 #  Testing: Compare performance of LinearSVC implemenation with Scikit-Learn's LinearSVC
@@ -159,7 +180,7 @@ if comparison:
             print(f"\nNumber of feature dimensions (d = {di})")
 
             # Generate test data
-            X, y, a = make_classification(d=di, n=ni, u=u, random_seed=random_seed, graph=True)
+            X, y, a = make_classification(d=di, n=ni, u=u, random_seed=random_seed)
             # Split data
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=random_seed+1)
 
