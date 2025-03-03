@@ -88,6 +88,7 @@ We demonstrate our `make_classification` method, which creates a distribution of
 A linearly separable 2D point distribution with a hyperplane.
 ![Random Distribution](./random_distribution.png)
 
+
 ## 3. Performance Analysis: Time Costs and Prediction Accuracy
 
 We evaluated our LinearSVC implementation on datasets with varying sizes and dimensions:
