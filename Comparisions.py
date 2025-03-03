@@ -17,14 +17,9 @@ def plot_2D(X, y, a, u):
     y_hyperplane = (-a[0] * x_hyperplane) / a[1]
     plt.plot(x_hyperplane, y_hyperplane, color='black', label='Hyperplane')
 
-    if y_pred is not None:
-        # Plot given predicted data points 
-        plt.scatter(X[y_pred == 1, 0], X[y_pred == 1, 1], color='green', marker='x', label='Class 1 (Predicted)', alpha=0.6)
-        plt.scatter(X[y_pred == -1, 0], X[y_pred == -1, 1], color='orange', marker='x', label='Class -1 (Predicted)', alpha=0.6)
-    else:
-        # Plot all data points
-        plt.scatter(X[y == 1, 0], X[y == 1, 1], color='blue', label='Class 1 (True)', alpha=0.6)
-        plt.scatter(X[y == -1, 0], X[y == -1, 1], color='red', label='Class -1 (True)', alpha=0.6)
+    # Plot all data points
+    plt.scatter(X[y == 1, 0], X[y == 1, 1], color='blue', label='Class 1 (True)', alpha=0.6)
+    plt.scatter(X[y == -1, 0], X[y == -1, 1], color='red', label='Class -1 (True)', alpha=0.6)
 
     plt.xlabel('Feature 1')
     plt.ylabel('Feature 2')
@@ -37,14 +32,9 @@ def plot_3D(X, y, a, u, predictions=False):
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(111, projection='3d')
 
-    if predictions:
-        # Plot given predicted data points 
-        ax.scatter(X[y_pred == 1, 0], X[y_pred == 1, 1], X[y_pred == 1, 2], color='green', marker='x', label='Class 1 (Predicted)', alpha=0.6)
-        ax.scatter(X[y_pred == -1, 0], X[y_pred == -1, 1], X[y_pred == -1, 2], color='orange', marker='x', label='Class -1 (Predicted)', alpha=0.6)
-    else:
-        # Plot all data points
-        ax.scatter(X[y == 1, 0], X[y == 1, 1], X[y == 1, 2], color='blue', label='Class 1', alpha=0.6)
-        ax.scatter(X[y == -1, 0], X[y == -1, 1], X[y == -1, 2], color='red', label='Class -1', alpha=0.6)
+    # Plot all data points
+    ax.scatter(X[y == 1, 0], X[y == 1, 1], X[y == 1, 2], color='blue', label='Class 1', alpha=0.6)
+    ax.scatter(X[y == -1, 0], X[y == -1, 1], X[y == -1, 2], color='red', label='Class -1', alpha=0.6)
 
     # Plot the hyperplane (3D)
     xx, yy = np.meshgrid(np.linspace(-u, u, 10), np.linspace(-u, u, 10))
@@ -98,8 +88,8 @@ random_seed = 123
 example_results = True
 if example_results:
     # Randomly generate a dth-dimension linearly separable data set with labels and seperating hyperplane
-    d = 3
-    n = 500
+    d = 2
+    n = 100
     u = 1e6
     X, y, a = make_classification(d=d, n=n, u=u, random_seed=random_seed, graph = True)
 
