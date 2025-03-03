@@ -134,7 +134,6 @@ We compared our custom LinearSVC with Scikit-Learn’s LinearSVC (solving both p
 
 
 ### Accuracy Comparison
-| Model | n=500 | n=1000 | n=5000 | n=10000 | n=100000 |
 ![Accuracy Comparison](./Timecost_Comparision.png)
 
 
