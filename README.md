@@ -129,18 +129,13 @@ We evaluated our LinearSVC implementation on datasets with varying sizes and dim
 We compared our custom LinearSVC with Scikit-Learn’s LinearSVC (solving both primal and dual problems) in terms of time cost and accuracy.
 
 ### Time Cost Comparison
-| Model | n=500 | n=1000 | n=5000 | n=10000 | n=100000 |
-|-------|------|------|------|------|------|
-| Custom LinearSVC | XXs | XXs | XXs | XXs | XXs |
-| Sklearn (Primal) | XXs | XXs | XXs | XXs | XXs |
-| Sklearn (Dual) | XXs | XXs | XXs | XXs | XXs |
+![Time Cost Comparison](./Accuracy_Comparision.png)
+
 
 ### Accuracy Comparison
 | Model | n=500 | n=1000 | n=5000 | n=10000 | n=100000 |
-|-------|------|------|------|------|------|
-| Custom LinearSVC | XX% | XX% | XX% | XX% | XX% |
-| Sklearn (Primal) | XX% | XX% | XX% | XX% | XX% |
-| Sklearn (Dual) | XX% | XX% | XX% | XX% | XX% |
+![Accuracy Comparison](./Timecost_Comparision.png)
+
 
 ### Conclusion
 - **Scikit-Learn’s LinearSVC (Primal) is the fastest.**
