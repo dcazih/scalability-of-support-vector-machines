@@ -107,7 +107,7 @@ if example_results:
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=random_seed+1)
 
     # Create and fit a SVC under training data
-    svc = LinearSVC(eta=0.001, n_iter=50, random_state=random_seed, L2_reg=0.001)
+    svc = LinearSVC(eta=0.001, epochs=50, random_state=random_seed, L2_reg=0.001)
     trained_svc = svc.fit(X_train, y_train)
 
     # Test model on test data
@@ -144,7 +144,7 @@ if scalability:
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=random_seed+1)
 
             # Create and fit a SVC under training data
-            svc = LinearSVC(eta=0.0005, n_iter=100, random_state=random_seed, L2_reg=0.001)
+            svc = LinearSVC(eta=0.0005, epochs=100, random_state=random_seed, L2_reg=0.001)
             trained_svc = svc.fit(X_train, y_train)
 
             y_pred = trained_svc.predict(X_test)
@@ -178,7 +178,7 @@ if comparison:
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=random_seed+1)
 
             # Test the custom SVC from this script
-            customSVC = LinearSVC(eta=0.0005, n_iter=100, random_state=random_seed, L2_reg=-.001)
+            customSVC = LinearSVC(eta=0.0005, epochs=100, random_state=random_seed, L2_reg=-.001)
             # Time the training
             startTime = time.time()
             customSVC.fit(X_train, y_train)
