@@ -9,7 +9,7 @@ from sklearn.svm import LinearSVC as SklearnLinearSVC
 ###############################
 #  Plotting Methods
 
-def plot_2D(X, y, a, u):
+def plot_2D(X, y, a, u, classtype="", title="Linearly Separable 2D Data with Hyperplane", ):
     plt.figure(figsize=(8, 6))
 
     # Plot the hyperplane 
@@ -18,23 +18,23 @@ def plot_2D(X, y, a, u):
     plt.plot(x_hyperplane, y_hyperplane, color='black', label='Hyperplane')
 
     # Plot all data points
-    plt.scatter(X[y == 1, 0], X[y == 1, 1], color='blue', label='Class 1 (True)', alpha=0.6)
-    plt.scatter(X[y == -1, 0], X[y == -1, 1], color='red', label='Class -1 (True)', alpha=0.6)
+    plt.scatter(X[y == 1, 0], X[y == 1, 1], color='blue', label=f'Class 1 {classtype}', alpha=0.6)
+    plt.scatter(X[y == -1, 0], X[y == -1, 1], color='red', label=f'Class -1 {classtype}', alpha=0.6)
 
     plt.xlabel('Feature 1')
     plt.ylabel('Feature 2')
-    plt.title('Linearly Separable Data with Hyperplane and Data/Predictions')
+    plt.title(title)
     plt.legend()
     plt.grid(True)
     plt.show()
 
-def plot_3D(X, y, a, u, predictions=False):
+def plot_3D(X, y, a, u, classtype="", title="Linearly Separable #D Data with Hyperplane"):
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(111, projection='3d')
 
     # Plot all data points
-    ax.scatter(X[y == 1, 0], X[y == 1, 1], X[y == 1, 2], color='blue', label='Class 1', alpha=0.6)
-    ax.scatter(X[y == -1, 0], X[y == -1, 1], X[y == -1, 2], color='red', label='Class -1', alpha=0.6)
+    ax.scatter(X[y == 1, 0], X[y == 1, 1], X[y == 1, 2], color='blue', label=f'Class 1 {classtype}', alpha=0.6)
+    ax.scatter(X[y == -1, 0], X[y == -1, 1], X[y == -1, 2], color='red', label=f'Class -1 {classtype}', alpha=0.6)
 
     # Plot the hyperplane (3D)
     xx, yy = np.meshgrid(np.linspace(-u, u, 10), np.linspace(-u, u, 10))
@@ -44,7 +44,7 @@ def plot_3D(X, y, a, u, predictions=False):
     ax.set_xlabel('Feature 1')
     ax.set_ylabel('Feature 2')
     ax.set_zlabel('Feature 3')
-    ax.set_title('Linearly Separable Data in 3D')
+    ax.set_title(title)
     ax.legend() 
     plt.show()
 
@@ -52,7 +52,7 @@ def plot_3D(X, y, a, u, predictions=False):
 ###############################
 #  Data Generation Method
 
-def make_classification(d=10, n=500, u=1e6, random_seed=123, graph = False):
+def make_classification(d=10, n=500, u=1e6, random_seed=123):
     """ Generates a set of linearly separable data 
         based on a random seperation hyperplane 
     """
@@ -68,13 +68,6 @@ def make_classification(d=10, n=500, u=1e6, random_seed=123, graph = False):
     # y: Label each xi such that if  ̄a^T*x < 0 then yi = −1, otherwise yi = 1
     y = np.sign(np.dot(X, a))
 
-    # Subdivide the dataset to a training dataset (70%) and a test dataset (30%) with unique seed
-    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=random_seed+1)
-
-    if graph and d in [2, 3]:
-        if d == 2: plot_2D(X, y, a, u)
-        else: plot_3D(X, y, a , u)
-
     return X, y, a
 ###################################################################
 
@@ -85,13 +78,16 @@ def make_classification(d=10, n=500, u=1e6, random_seed=123, graph = False):
 
 random_seed = 123
 
-example_results = True
+example_results = False
 if example_results:
     # Randomly generate a dth-dimension linearly separable data set with labels and seperating hyperplane
     d = 2
     n = 100
     u = 1e6
-    X, y, a = make_classification(d=d, n=n, u=u, random_seed=random_seed, graph = True)
+    X, y, a = make_classification(d=d, n=n, u=u, random_seed=random_seed)
+
+    # Graph distribution
+    plot_2D(X, y, a, u, "(true)", "Demo of 2D Random Point Distribution for d = 2, n = 100")
 
     # Subdivide the dataset to a training dataset (70%) and a test dataset (30%) with unique seed
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=random_seed+1)
@@ -109,14 +105,14 @@ if example_results:
     print(f"Test data missclassifcations: {misclassifcations}\nAccuracy: {accuracy:.2f}")
 
     # Plot models predictions against hyperplane
-    if d==2: plot_2D(X_test, y_pred, a, u)
-    elif d==3: plot_3D(X_test, y_pred, a, u)
+    if d==2: plot_2D(X_test, y_pred, a, u, "(predicted)")
+    elif d==3: plot_3D(X_test, y_pred, a, u, "(predicted)")
 
 
 ###############################
 #  Testing: Exploring Scalability
 
-scalability = False
+scalability = True
 if scalability:
 
     u = 1e12
@@ -128,7 +124,7 @@ if scalability:
         print(f"\nNumber of data points (n = {ni}):")
         for di in d:
             # Create linearly separable data
-            X, y, a = make_classification(d=di, n=ni, u=u, random_seed=random_seed, graph = True)
+            X, y, a = make_classification(d=di, n=ni, u=u, random_seed=random_seed)
 
             # Split data
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=random_seed+1)
