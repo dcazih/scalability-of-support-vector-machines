@@ -10,11 +10,11 @@ class LinearSVC:
     ------------
     eta : float
         Learning rate (between 0.0 and 1.0)
-    n_iter : int
+    epochs : int
         Number of passes over the training dataset.
     random_state : int
         Random number generator seed for random weight initialization.
-    lambda_reg : float
+    L2_reg : float
         Regularization parameter for L2 regularization.
     
     Attributes
@@ -26,9 +26,9 @@ class LinearSVC:
     losses_ : list
         Hinge loss function values in each epoch.
     """
-    def __init__(self, eta=0.0005, n_iter=100, random_state=1, L2_reg=0.001):
+    def __init__(self, eta=0.0005, epochs=100, random_state=1, L2_reg=0.001):
         self.eta = eta
-        self.n_iter = n_iter
+        self.epochs = epochs
         self.random_state = random_state
         self.L2_reg = L2_reg
         
@@ -39,7 +39,7 @@ class LinearSVC:
         self.b_ = 0
         self.losses_ = []
         
-        for epoch in range(self.n_iter):
+        for epoch in range(self.epochs):
             loss = 0
             for xi, yi in zip(X, y):
                 margin = yi * self.net_input(xi)
